@@ -1,9 +1,15 @@
-const express = require('express')
-const app = express()
-module.exports = app;
+const express = require("express");
+const router = require("./App/routes/index.js");
+const app = express();
 
 const db = require("./App/models/index.js");
 db.sequelize
-.authenticate()
-.then(() => console.log("Database connected ..."))
-.catch((err) => console.log(err));
+  .authenticate()
+  .then(() => console.log("Database connected ..."))
+  .catch((err) => console.log(err));
+
+//Ajout des routes
+app.use(express.json());
+app.use("/api", router);
+
+module.exports = app;

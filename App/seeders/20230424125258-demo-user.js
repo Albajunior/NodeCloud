@@ -8,7 +8,8 @@ module.exports = {
       lastname: 'Doett',
       email: "john.doe@mail.com",
       password: "123456",
-     
+      createdAt: new Date(),
+      updatedAt: new Date()
 
     }], {});
   },
