@@ -5,6 +5,7 @@ exports.readAll = async (req, res) => {
     console.log(req.body);
     const wood = await Wood.findAll();
     res.json(wood);
+    res.status(200);
   } catch (error) {
     //res.send(error);
     console.error(err);
@@ -16,10 +17,10 @@ exports.readAll = async (req, res) => {
 exports.findByHardness = async (req, res) => {
   try {
     console.log(req.body);
-    const hardness = req.params.hardness;
+    
     const wood = await Wood.findAll({
       where: {
-        hardness: hardness
+        hardness: req.params.hardness
       }
     });
     res.json(wood);
