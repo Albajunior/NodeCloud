@@ -16,9 +16,10 @@ exports.readAll = async (req, res) => {
 exports.findByHardness = async (req, res) => {
   try {
     console.log(req.body);
+    const hardness = req.params.hardness;
     const wood = await Wood.findAll({
       where: {
-        hardness: 'hard',
+        hardness: hardness
       }
     });
     res.json(wood);
