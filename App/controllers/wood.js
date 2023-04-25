@@ -1,3 +1,4 @@
-exports.list = (req, res) => {
+
+exports.readAll = (req, res) => {
     res.send('List of woods');
     }
