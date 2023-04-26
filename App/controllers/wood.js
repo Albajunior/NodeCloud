@@ -21,7 +21,7 @@ exports.findByHardness = async (req, res) => {
         hardness: req.params.hardness
       }
     });
-    res.json(wood).status(200);
+    res.status(200).json(wood);
   } catch (error) {
     console.error(err);
     res.status(500).json({ erreur: 'Erreur lors de la récupération' });

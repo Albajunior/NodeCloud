@@ -4,6 +4,7 @@
   "description": "exo1",
   "main": "server.js",
   "scripts": {
+    "migrate": "cd app && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server"
   },
