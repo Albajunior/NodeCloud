@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.ENUM('tender', 'medium-hard', 'hard')
       },
       image: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       createdAt: {

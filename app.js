@@ -12,6 +12,6 @@ db.sequelize
 app.use(express.json());
 app.use("/api", router);
 
-app.use("/uploads", express.static(__dirname, "uploads"));
+//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 module.exports = app;

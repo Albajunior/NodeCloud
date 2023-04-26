@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
     console.log(req.body);
     req.body.password = await bcrypt.hash(req.body.password, 10);
     const user = await User.create(req.body);
-    res.status(201).send(user);
+    res.status(201).json(user);
   } catch (error) {
     console.error(err);
     res.status(500).json({ erreur: "Erreur lors de la récupération" });
@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
           token: token,
         });
       } else {
-        return res.status(404).json({ error: "Utilisateur incorrect" });
+        return res.status(401).json({ error: "Utilisateur incorrect" });
       }
     }
   } catch (error) {
