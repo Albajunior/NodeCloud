@@ -5,8 +5,8 @@ const auth = require("../middleware/auth.js")
 const multer = require('../middleware/multer.js')
 
 
-router.get('',auth, woodCtrl.readAll);
+router.get('/',auth, woodCtrl.readAll);
 router.get('/:hardness', auth, woodCtrl.findByHardness);
-router.post('',auth, multer, woodCtrl.createWood);
+router.post('/',auth, multer, woodCtrl.createWood);
 
 module.exports = router;

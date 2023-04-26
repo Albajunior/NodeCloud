@@ -1,3 +1,4 @@
+var path = require("path");
 const express = require("express");
 const router = require("./App/routes/index.js");
 const app = express();
@@ -12,6 +13,6 @@ db.sequelize
 app.use(express.json());
 app.use("/api", router);
 
-//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 module.exports = app;

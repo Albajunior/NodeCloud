@@ -28,12 +28,22 @@ exports.findByHardness = async (req, res) => {
 };
 
 exports.createWood = async (req, res) => {
-  const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+
   try {
+    var pathname = null
+    if(req.file){
+      pathname = `${req.protocol}://${req.get("host")}/uploads/${
+        req.file.filename
+      }`;
+    }
     console.log(req.body);
-    const wood = await Wood.create(req.body);
-    
-    res.status(200).json.parse(req.body.datas)
+    const woodbody = {
+      ...JSON.parse(req.body.datas), 
+      image: pathname,
+    };
+    const wood = await Wood.create(woodbody);
+
+    res.status(200).json(wood);
   } catch (error) {
     console.error(err);
     res.status(500).json({ erreur: "Erreur " });
