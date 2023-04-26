@@ -4,10 +4,8 @@ exports.readAll = async (req, res) => {
   try {
     console.log(req.body);
     const wood = await Wood.findAll();
-    res.json(wood);
-    res.status(200);
+    res.status(200).json(wood);
   } catch (error) {
-    //res.send(error);
     console.error(err);
     res.status(500).json({ erreur: 'Erreur lors de la récupération' });
   }
@@ -23,9 +21,8 @@ exports.findByHardness = async (req, res) => {
         hardness: req.params.hardness
       }
     });
-    res.json(wood);
+    res.json(wood).status(200);
   } catch (error) {
-    //res.send(error);
     console.error(err);
     res.status(500).json({ erreur: 'Erreur lors de la récupération' });
   }
