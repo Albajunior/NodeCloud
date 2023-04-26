@@ -49,3 +49,19 @@ exports.createWood = async (req, res) => {
     res.status(500).json({ erreur: "Erreur " });
   }
 };
+
+exports.deleteWood = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userId = parseInt(req.params.id); 
+    const wood = await Wood.destroy({
+      where: {
+        id: userId
+      },
+    });
+    res.status(200).json({ message: `Le woods  ${userId} a été supprimé.` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erreur: "Erreur lors de la récupération" });
+  }
+};
