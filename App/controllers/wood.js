@@ -1,4 +1,5 @@
 const { Wood } = require("../models");
+const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
 exports.readAll = async (req, res) => {
   try {
@@ -28,3 +29,16 @@ exports.findByHardness = async (req, res) => {
   }
 
 };  
+
+exports.createWood = async (req, res) => {
+  try {
+    console.log(req.body);
+    //req.body.password = await bcrypt.hash(req.body.password, 10);
+    const wood = await Wood.create(req.body);
+    res.status(201).json.parse(req.body.datas),
+    image: pathname,
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({ erreur: "Erreur lors de la récupération" });
+  }
+};
