@@ -28,17 +28,16 @@ exports.findByHardness = async (req, res) => {
 };
 
 exports.createWood = async (req, res) => {
-
   try {
-    var pathname = null
-    if(req.file){
+    var pathname = null;
+    if (req.file) {
       pathname = `${req.protocol}://${req.get("host")}/uploads/${
         req.file.filename
       }`;
     }
     console.log(req.body);
     const woodbody = {
-      ...JSON.parse(req.body.datas), 
+      ...JSON.parse(req.body.datas),
       image: pathname,
     };
     const wood = await Wood.create(woodbody);
@@ -52,16 +51,53 @@ exports.createWood = async (req, res) => {
 
 exports.deleteWood = async (req, res) => {
   try {
-    console.log(req.body);
-    const userId = parseInt(req.params.id); 
-    const wood = await Wood.destroy({
+    const userId = parseInt(req.params.id);
+    const wood = await Wood.findOne({
       where: {
-        id: userId
+        id: userId,
       },
     });
-    res.status(200).json({ message: `Le woods  ${userId} a été supprimé.` });
+
+    if (wood === null) {
+      //console.log("Not found!");
+      return res.status(404).json({ error: "Wood non trouvé" });
+    } else {
+      await Wood.destroy({
+        where: {
+          id: userId,
+        },
+      });
+      res.status(200).json({ message: `Le woods  ${userId} a été supprimé.` });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ erreur: "Erreur lors de la récupération" });
+  }
+};
+
+exports.updateWood = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const { firstName, lastName, email } = req.body;
+    const wood = await Wood.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (wood === null) {
+      //console.log("Not found!");
+      return res.status(404).json({ error: "Wood non trouvé" });
+    } else {
+      const wood =  await Wood.update({  name: req.body.name }, {
+        where: {
+          id: userId,
+        },
+      });
+      res.status(200).json({message: `Le woods  ${userId} a été modifie.`, wood});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erreur: "Erreur lors de la mise a jour" });
   }
 };
