@@ -12,21 +12,11 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      typeId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Types",
-          key: "id",
-        },
-        allowNull: false,
+      type: {
+        type: Sequelize.ENUM('softwood', 'exotic wood', 'noble and hardwoods')
       },
-      hardnessID: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Hardnesses",
-          key: "id",
-        },
-        allowNull: false,
+      hardness: {
+        type: Sequelize.ENUM('tender', 'medium-hard', 'hard')
       },
       image: {
         type: Sequelize.STRING,
