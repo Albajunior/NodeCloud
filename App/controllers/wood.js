@@ -1,9 +1,17 @@
 const { Wood } = require("../models");
-
+const { Hardness } = require("../models");
+const { Type } = require("../models");
+const fs = require("fs");
 exports.readAll = async (req, res) => {
   try {
     console.log(req.body);
-    const wood = await Wood.findAll();
+    const wood = await Wood.findAll({
+       include:[ 
+        { model: Hardness, as: 'hardness'},
+        { model: Type, as: 'type'},
+    ]
+       });
+    console.log(JSON.stringify(wood, null, 2));
     res.status(200).json(wood);
   } catch (error) {
     console.error(error);
@@ -51,23 +59,26 @@ exports.createWood = async (req, res) => {
 
 exports.deleteWood = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-    const wood = await Wood.findOne({
-      where: {
-        id: userId,
-      },
-    });
+    const woodId = parseInt(req.params.id);
+    const wood = await Wood.findByPk(woodId);
 
     if (wood === null) {
-      //console.log("Not found!");
       return res.status(404).json({ error: "Wood non trouvé" });
     } else {
-      await Wood.destroy({
-        where: {
-          id: userId,
-        },
-      });
-      res.status(200).json({ message: `Le woods  ${userId} a été supprimé.` });
+      if (wood.image) {
+        const imagePath = `uploads/${wood.image.split("/").pop()}`;
+        fs.unlink(imagePath, (error) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Image deleted:", imagePath);
+          }
+        });
+      }
+
+      await wood.destroy();
+
+      res.status(200).json({ message: `Le woods  ${woodId} a été supprimé.` });
     }
   } catch (error) {
     console.error(error);
@@ -77,24 +88,44 @@ exports.deleteWood = async (req, res) => {
 
 exports.updateWood = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-    const { firstName, lastName, email } = req.body;
-    const wood = await Wood.findOne({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (wood === null) {
-      //console.log("Not found!");
+    const woodId = req.params.id;
+    const wood = await Wood.findByPk(woodId);
+    
+    if (!wood ) {
       return res.status(404).json({ error: "Wood non trouvé" });
     } else {
-      const wood =  await Wood.update({  name: req.body.name }, {
-        where: {
-          id: userId,
-        },
-      });
-      res.status(200).json({message: `Le woods  ${userId} a été modifie.`, wood});
+      let newwoodbody = {
+        ...JSON.parse(req.body.datas),
+      };
+
+      if (req.file) {
+        var pathname = `${req.protocol}://${req.get("host")}/uploads/${
+          req.file.filoename
+        }`;
+        newwoodbody = {
+          ...newwoodbody,
+          image: pathname,
+        };
+        console.log(wood)
+        //deleteimg
+        if (wood.image) {
+          const imagePath = `uploads/${wood.image.split("/").pop()}`;
+          fs.unlink(imagePath, (error) => {
+            if (error) {
+              console.error(error);
+            } else {
+              console.log("Image deleted:", imagePath);
+            }
+          });
+        }
+      }
+
+      await wood.update(
+        newwoodbody 
+      );
+      res
+        .status(200)
+        .json({ message: `Le woods  ${woodId} a été modifie.`, wood});
     }
   } catch (error) {
     console.error(error);
